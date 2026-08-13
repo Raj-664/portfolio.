@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd343'/%3E%3Cstop offset='1' stop-color='%234b8bbe'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='42' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' font-family='monospace' font-weight='bold' fill='%23121212'%3EE%3C/text%3E%3C/svg%3E">
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin Dashboard | Emamuddin Mallick</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-side" id="admin-side">
+      <a class="admin-brand" href="/">Emamuddin<span class="brand-dot">.</span>dev</a>
+      <p class="admin-side-label">Admin</p>
+      <nav class="admin-nav">
+        <button class="admin-nav-link active" data-tab="dashboard">Dashboard</button>
+        <button class="admin-nav-link" data-tab="projects">Projects</button>
+        <button class="admin-nav-link" data-tab="certificates">Certificates</button>
+        <button class="admin-nav-link" data-tab="account">Account</button>
+      </nav>
+      <div class="admin-side-foot">
+        <span class="admin-user" id="admin-user"></span>
+        <a class="admin-site-link" href="/" target="_blank">View site &nearr;</a>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button class="admin-burger" id="admin-burger" aria-label="Toggle menu">&#9776;</button>
+        <h1 id="page-title">Dashboard</h1>
+        <button class="btn btn-sm btn-outline" id="logout-btn">Logout</button>
+      </header>
+
+      <div class="admin-content">
+        <!-- DASHBOARD -->
+        <section class="tab-panel active" id="tab-dashboard">
+          <div class="stat-cards">
+            <div class="stat-card">
+              <span class="stat-card-label">Total Projects</span>
+              <strong class="stat-card-value" id="stat-projects">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-label">Total Certificates</span>
+              <strong class="stat-card-value" id="stat-certificates">0</strong>
+            </div>
+          </div>
+          <div class="dash-cols">
+            <div class="dash-card">
+              <h2>Recent Projects</h2>
+              <ul class="dash-list" id="recent-projects"></ul>
+            </div>
+            <div class="dash-card">
+              <h2>Recent Certificates</h2>
+              <ul class="dash-list" id="recent-certificates"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section class="tab-panel" id="tab-projects">
+          <div class="panel-head">
+            <h2>Projects</h2>
+            <button class="btn btn-primary" id="add-project-btn">+ Add Project</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Technologies</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="projects-table-body"></tbody>
+            </table>
+          </div>
+          <p class="empty-note" id="projects-table-empty" hidden>No projects yet. Add your first project.</p>
+        </section>
+
+        <!-- CERTIFICATES -->
+        <section class="tab-panel" id="tab-certificates">
+          <div class="panel-head">
+            <h2>Certificates</h2>
+            <button class="btn btn-primary" id="add-cert-btn">+ Add Certificate</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Organization</th>
+                  <th>Date</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="certs-table-body"></tbody>
+            </table>
+          </div>
+          <p class="empty-note" id="certs-table-empty" hidden>No certificates yet. Add your first certificate.</p>
+        </section>
+
+        <!-- ACCOUNT -->
+        <section class="tab-panel" id="tab-account">
+          <div class="dash-card account-card">
+            <h2>Change Password</h2>
+            <form id="change-password-form" novalidate>
+              <div class="form-group">
+                <label for="current-password">Current password</label>
+                <input type="password" id="current-password" autocomplete="current-password" required />
+              </div>
+              <div class="form-group">
+                <label for="new-password">New password (min 8 characters)</label>
+                <input type="password" id="new-password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="form-group">
+                <label for="confirm-password">Confirm new password</label>
+                <input type="password" id="confirm-password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <p class="form-status" id="pw-status" role="status" aria-live="polite"></p>
+              <button type="submit" class="btn btn-primary">Update Password</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project modal -->
+  <div class="admin-modal-overlay" id="project-modal" aria-hidden="true">
+    <div class="admin-modal">
+      <div class="admin-modal-head">
+        <h3 id="project-modal-title">Add Project</h3>
+        <button class="modal-x" data-close="project-modal" aria-label="Close">&times;</button>
+      </div>
+      <form id="project-form" novalidate>
+        <input type="hidden" id="project-id" />
+        <div class="form-group">
+          <label for="p-title">Title *</label>
+          <input type="text" id="p-title" maxlength="160" required />
+        </div>
+        <div class="form-group">
+          <label for="p-description">Description</label>
+          <textarea id="p-description" rows="4" maxlength="4000"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="p-category">Category</label>
+            <input type="text" id="p-category" maxlength="80" placeholder="e.g. AI, Web App" />
+          </div>
+          <div class="form-group">
+            <label for="p-technologies">Technologies (comma separated)</label>
+            <input type="text" id="p-technologies" maxlength="500" placeholder="Python, Flask, MySQL" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="p-github">GitHub URL</label>
+            <input type="url" id="p-github" maxlength="500" placeholder="https://github.com/..." />
+          </div>
+          <div class="form-group">
+            <label for="p-demo">Live Demo URL</label>
+            <input type="url" id="p-demo" maxlength="500" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="p-image">Project image (optional)</label>
+          <input type="file" id="p-image" accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" />
+          <small class="field-hint">PNG, JPG, GIF, WebP or SVG · max 10 MB</small>
+        </div>
+        <p class="form-status" id="project-form-status" role="status" aria-live="polite"></p>
+        <div class="admin-modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="project-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="project-submit">Save Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Certificate modal -->
+  <div class="admin-modal-overlay" id="cert-modal" aria-hidden="true">
+    <div class="admin-modal">
+      <div class="admin-modal-head">
+        <h3 id="cert-modal-title">Add Certificate</h3>
+        <button class="modal-x" data-close="cert-modal" aria-label="Close">&times;</button>
+      </div>
+      <form id="cert-form" novalidate>
+        <input type="hidden" id="cert-id" />
+        <div class="form-group">
+          <label for="c-title">Certificate title *</label>
+          <input type="text" id="c-title" maxlength="200" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="c-org">Issuing organization</label>
+            <input type="text" id="c-org" maxlength="200" />
+          </div>
+          <div class="form-group">
+            <label for="c-date">Date / year</label>
+            <input type="text" id="c-date" maxlength="80" placeholder="e.g. Aug 2026" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="c-file">Certificate file (image or PDF) *</label>
+          <input type="file" id="c-file" accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml,application/pdf" />
+          <small class="field-hint">PNG, JPG, GIF, WebP, SVG or PDF · max 10 MB</small>
+        </div>
+        <p class="form-status" id="cert-form-status" role="status" aria-live="polite"></p>
+        <div class="admin-modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="cert-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="cert-submit">Save Certificate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirm dialog -->
+  <div class="admin-modal-overlay" id="confirm-modal" aria-hidden="true">
+    <div class="admin-modal small">
+      <div class="admin-modal-head">
+        <h3 id="confirm-title">Confirm</h3>
+        <button class="modal-x" data-close="confirm-modal" aria-label="Close">&times;</button>
+      </div>
+      <p class="confirm-text" id="confirm-text"></p>
+      <div class="admin-modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="confirm-modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirm-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

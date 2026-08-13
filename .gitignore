@@ -1,0 +1,35 @@
+@"
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# Build files
+dist/
+build/
+"@ | Set-Content -Encoding UTF8 .gitignoreGet-Content .gitignore
+
+# Local database
+backend/data/portfolio.db

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emamuddin Mallick | Python Developer</title>
+  <meta name="description" content="Portfolio of Emamuddin Mallick — Python Developer, Backend Developer and MCA Student. Explore projects, skills, experience and certifications." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd343'/%3E%3Cstop offset='1' stop-color='%234b8bbe'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='42' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' font-family='monospace' font-weight='bold' fill='%23121212'%3EE%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <!-- Side menu -->
+  <div class="side-overlay" id="side-overlay" aria-hidden="true"></div>
+  <aside class="side-menu" id="side-menu" aria-hidden="true">
+    <div class="side-menu-head">
+      <span class="side-menu-title">Menu</span>
+      <button class="side-close" id="side-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="side-menu-links" aria-label="Menu">
+      <a href="#about"><span class="side-link-icon">01</span>About</a>
+      <a href="#education"><span class="side-link-icon">02</span>Education</a>
+      <a href="#learning"><span class="side-link-icon">03</span>Learning</a>
+      <a href="#contact"><span class="side-link-icon">04</span>Contact</a>
+      <a href="#certificates"><span class="side-link-icon">05</span>Certificates</a>
+      <a href="http://127.0.0.1:5000/admin/login"><span class="side-link-icon">06</span>Admin Login</a>
+      <a href="assets/resume.pdf" class="side-resume" download>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+        Download Resume
+      </a>
+    </nav>
+    <div class="side-menu-foot">
+      <p>Let's connect</p>
+      <div class="side-social">
+        <a href="https://github.com/Raj-664" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+        <a href="https://www.linkedin.com/in/emamuddin-mallick/" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
+        <a href="mailto:rajmallick664@gmail.com" aria-label="Email">Email</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Navbar -->
+  <header class="nav" id="navbar">
+    <div class="nav-inner container">
+      <a href="#hero" class="brand">emamuddin<span class="brand-dot">.</span>dev</a>
+      <nav class="nav-links" id="nav-links" aria-label="Primary">
+        <a href="#hero" class="active">Home</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="side-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-inner container">
+        <div class="hero-copy">
+          <p class="hero-tag reveal-load d1">&lt; python . backend  /&gt;</p>
+          <h1 class="hero-name">
+            <span class="reveal-load d2">I'm</span>
+            <span class="reveal-load d3 gradient-text">Emamuddin Mallick</span>
+          </h1>
+          <div class="hero-roles reveal-load d4">
+            <span class="role-pill">Python Developer</span>
+            <span class="role-pill">Backend Developer</span>
+            <span class="role-pill">MCA Student</span>
+          </div>
+          <p class="hero-desc reveal-load d5">
+            I build clean, scalable backend systems and intelligent tools with
+            Python, and turn ideas into polished web experiences.
+          </p>
+          <div class="hero-actions reveal-load d6">
+            <a href="#projects" class="btn btn-primary">View Projects</a>
+            <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+            <a href="assets/resume.pdf" class="btn btn-resume" download>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+              Download Resume
+            </a>
+          </div>
+          <div class="hero-stats reveal-load d7">
+            <div class="stat"><strong>3+</strong><span>Projects Built</span></div>
+            <div class="stat"><strong>12+</strong><span>Technologies</span></div>
+            <div class="stat"><strong>100%</strong><span>Learning Attitude</span></div>
+          </div>
+        </div>
+
+        <!-- Rotating skill circle -->
+        <div class="skill-circle-wrap reveal-load d5" aria-hidden="true">
+          <div class="skill-circle">
+            <div class="skill-ring ring-a"></div>
+            <div class="skill-ring ring-b"></div>
+            <div class="orbit-dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="skill-center">
+              <span class="skill-center-tag">currently</span>
+              <strong class="skill-center-text" id="skillCenterText">Python</strong>
+              <span class="skill-center-sub">Python · Backend · Web</span>
+            </div>
+            <div class="skill-glow"></div>
+          </div>
+        </div>
+      </div>
+      <a href="#skills" class="scroll-hint" aria-label="Scroll to skills">
+        <span class="mouse"><span class="wheel"></span></span>
+        <span class="scroll-text">scroll</span>
+      </a>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <div class="container">
+        <p class="section-label">01 · skills</p>
+        <h2 class="section-title">My tech toolkit</h2>
+        <p class="section-sub">The languages and tools I use to build products end-to-end.</p>
+        <div class="skills-cats">
+          <div class="skill-cat reveal">
+            <h3 class="skill-cat-title"><span class="skill-cat-icon py">P</span>Programming</h3>
+            <div class="skill-cat-chips">
+              <span class="chip">Python</span>
+              <span class="chip">Java</span>
+              <span class="chip">C</span>
+              <span class="chip">JavaScript</span>
+            </div>
+          </div>
+          <div class="skill-cat reveal">
+            <h3 class="skill-cat-title"><span class="skill-cat-icon fl">F</span>Backend</h3>
+            <div class="skill-cat-chips">
+              <span class="chip">Flask</span>
+              <span class="chip">REST API</span>
+              <span class="chip">PHP</span>
+            </div>
+          </div>
+          <div class="skill-cat reveal">
+            <h3 class="skill-cat-title"><span class="skill-cat-icon db">S</span>Database</h3>
+            <div class="skill-cat-chips">
+              <span class="chip">MySQL</span>
+              <span class="chip">SQL</span>
+            </div>
+          </div>
+          <div class="skill-cat reveal">
+            <h3 class="skill-cat-title"><span class="skill-cat-icon fe">H</span>Frontend</h3>
+            <div class="skill-cat-chips">
+              <span class="chip">HTML</span>
+              <span class="chip">CSS</span>
+              <span class="chip">JavaScript</span>
+            </div>
+          </div>
+          <div class="skill-cat reveal">
+            <h3 class="skill-cat-title"><span class="skill-cat-icon tl">G</span>Tools</h3>
+            <div class="skill-cat-chips">
+              <span class="chip">Git</span>
+              <span class="chip">GitHub</span>
+              <span class="chip">VS Code</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+      <div class="container">
+        <p class="section-label">02 · projects</p>
+        <h2 class="section-title">Things I've built</h2>
+        <p class="section-sub">Selected projects — explore the code and live demos.</p>
+        <div class="filter-bar" id="project-filters" role="tablist" aria-label="Project filters"></div>
+        <div class="projects-grid" id="projects-grid"></div>
+        <p class="empty-note" id="projects-empty" hidden>No projects added yet.</p>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience">
+      <div class="container">
+        <p class="section-label">03 · experience</p>
+        <h2 class="section-title">Where I've worked</h2>
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Web Developer &amp; Website Management Intern</h3>
+                <span class="timeline-org">The Digital India Tech</span>
+                <span class="timeline-date">Internship</span>
+              </div>
+              <p>
+                Built and maintained websites, implemented responsive layouts,
+                optimized site performance and collaborated with teams to ship
+                polished, production-ready web pages.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATES -->
+    <section class="section" id="certificates">
+      <div class="container">
+        <p class="section-label">04 · certificates</p>
+        <h2 class="section-title">Certifications</h2>
+        <p class="section-sub">Courses, simulations and quizzes I've completed.</p>
+        <div class="cert-grid" id="cert-grid"></div>
+        <p class="empty-note" id="cert-empty" hidden>No certificates added yet.</p>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="container">
+        <p class="section-label">about me</p>
+        <h2 class="section-title">Turning curiosity into code</h2>
+        <div class="about-grid">
+          <div class="about-card reveal">
+            <span class="card-tile tile-mca">MCA</span>
+            <h3>MCA Student</h3>
+            <p>Currently pursuing my Master of Computer Applications at Techno India University.</p>
+          </div>
+          <div class="about-card reveal">
+            <span class="card-tile tile-dev">DEV</span>
+            <h3>Developer</h3>
+            <p>Focused on Python and backend engineering, building real-world applications from scratch.</p>
+          </div>
+          <div class="about-card reveal">
+            <span class="card-tile tile-pro">PRJ</span>
+            <h3>Projects</h3>
+            <p>Shipped AI, web and examination tools that solve practical problems.</p>
+          </div>
+          <div class="about-card reveal">
+            <span class="card-tile tile-lrn">LRN</span>
+            <h3>Current Learning</h3>
+            <p>Deepening DSA, algorithms and AI integration to level up as an engineer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="section" id="education">
+      <div class="container">
+        <p class="section-label">education</p>
+        <h2 class="section-title">Academic background</h2>
+        <div class="edu-grid">
+          <div class="edu-card reveal">
+            <span class="edu-degree">MCA</span>
+            <h3>Master of Computer Applications</h3>
+            <p class="edu-school">Techno India University</p>
+            <p class="edu-note">Post-graduation · Computer Applications</p>
+          </div>
+          <div class="edu-card reveal">
+            <span class="edu-degree">BCA</span>
+            <h3>Bachelor of Computer Applications</h3>
+            <p class="edu-school">Burdwan Raj College</p>
+            <p class="edu-note">Graduation · Computer Applications</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARNING -->
+    <section class="section" id="learning">
+      <div class="container">
+        <p class="section-label">github &amp; dsa</p>
+        <h2 class="section-title">My learning journey</h2>
+        <p class="section-sub">Currently sharpening my fundamentals — one problem at a time.</p>
+        <div class="path">
+          <div class="path-step reveal" data-step="1">
+            <span class="path-num">1</span>
+            <div>
+              <h3>Python</h3>
+              <p>Mastering syntax, OOP and the standard library.</p>
+            </div>
+          </div>
+          <div class="path-arrow reveal" aria-hidden="true"></div>
+          <div class="path-step reveal" data-step="2">
+            <span class="path-num">2</span>
+            <div>
+              <h3>Data Structures</h3>
+              <p>Arrays, linked lists, stacks, queues, trees.</p>
+            </div>
+          </div>
+          <div class="path-arrow reveal" aria-hidden="true"></div>
+          <div class="path-step reveal" data-step="3">
+            <span class="path-num">3</span>
+            <div>
+              <h3>Algorithms</h3>
+              <p>Sorting, searching, recursion and complexity.</p>
+            </div>
+          </div>
+          <div class="path-arrow reveal" aria-hidden="true"></div>
+          <div class="path-step reveal" data-step="4">
+            <span class="path-num">4</span>
+            <div>
+              <h3>Backend Development</h3>
+              <p>APIs, databases and server-side engineering.</p>
+            </div>
+          </div>
+          <div class="path-arrow reveal" aria-hidden="true"></div>
+          <div class="path-step reveal" data-step="5">
+            <span class="path-num">5</span>
+            <div>
+              <h3>AI Integration</h3>
+              <p>Bringing machine learning into real products.</p>
+            </div>
+          </div>
+        </div>
+        <div class="github-cta reveal">
+          <a href="https://github.com/Raj-664" target="_blank" rel="noopener" class="btn btn-primary">Follow My DSA Journey on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <div class="container">
+        <p class="section-label">contact</p>
+        <h2 class="section-title">Let's build something together</h2>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <a class="contact-link reveal" href="mailto:rajmallick664@gmail.com">
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+              </span>
+              <div>
+                <span class="contact-label">Email</span>
+                <span class="contact-value">rajmallick664@gmail.com</span>
+              </div>
+            </a>
+            <a class="contact-link reveal" href="https://www.linkedin.com/in/emamuddin-mallick/" target="_blank" rel="noopener">
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              </span>
+              <div>
+                <span class="contact-label">LinkedIn</span>
+                <span class="contact-value">emamuddin-mallick</span>
+              </div>
+            </a>
+            <a class="contact-link reveal" href="https://github.com/Raj-664" target="_blank" rel="noopener">
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.11.79-.25.79-.56v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+              </span>
+              <div>
+                <span class="contact-label">GitHub</span>
+                <span class="contact-value">@Raj-664</span>
+              </div>
+            </a>
+            <a class="contact-link reveal" href="assets/resume.pdf" download>
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+              </span>
+              <div>
+                <span class="contact-label">Resume</span>
+                <span class="contact-value">Download my resume</span>
+              </div>
+            </a>
+          </div>
+
+          <form class="contact-form reveal" id="contact-form" novalidate>
+            <h3>Send a message</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="What's this about?" required />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Write your message..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+              Send Message
+            </button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Emamuddin Mallick · Crafted with Python &amp; Flask</p>
+      <div class="footer-links">
+        <a href="https://github.com/Raj-664" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/emamuddin-mallick/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:rajmallick664@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Project details modal -->
+  <div class="modal-overlay" id="project-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" id="modal-close" aria-label="Close details">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
