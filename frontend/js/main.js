@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  const API_BASE = (window.API_BASE || '').replace(/\/$/, '');
+  const API_BASE = 'https://portfolio-api-bmyk.onrender.com';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function escapeHtml(str) {
