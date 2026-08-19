@@ -42,7 +42,11 @@ ALLOWED_IMAGE_EXTS = {"png", "jpg", "jpeg", "gif", "webp", "svg"}
 ALLOWED_CERT_EXTS = {"pdf"} | ALLOWED_IMAGE_EXTS
 
 app = Flask(__name__, static_folder=None)
-CORS(app, origins=["https://raj-664.github.io"])
+CORS(app, origins=[
+    "https://raj-664.github.io",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500"
+])
 app.config["JSON_AS_ASCII"] = False
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB request cap
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
