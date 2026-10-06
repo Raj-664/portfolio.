@@ -4,7 +4,11 @@
 (function () {
   'use strict';
 
-  const API_BASE = 'https://portfolio-api-bmyk.onrender.com';
+  const API_BASE =
+    window.PORTFOLIO_API_BASE ||
+    (location.protocol === 'file:' || /:5500$/.test(location.host)
+      ? 'http://127.0.0.1:5000'
+      : location.origin);
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function escapeHtml(str) {
@@ -105,26 +109,50 @@
 
   /* ---------- Rotating skill circle ---------- */
   const skills = [
-    'Python', 'Flask', 'SQL', 'HTML', 'CSS', 'JavaScript',
-    'Git', 'GitHub', 'REST API', 'MySQL', 'Java', 'C'
+    { name: 'Python', sub: 'Programming · Backend · Web' },
+    { name: 'SQL', sub: 'Database · Queries · Data' },
+    { name: 'DSA', sub: 'Data Structures · Algorithms · Problem Solving' },
+    { name: 'JavaScript', sub: 'Frontend · Web · Interactive' },
+    { name: 'API', sub: 'REST API · Flask · Backend' },
+    { name: 'PHP', sub: 'Backend · Web · MySQL' },
+    { name: 'GitHub', sub: 'Git · Code · Collaboration' }
   ];
   const skillText = document.getElementById('skillCenterText');
+  const skillSub = document.querySelector('.skill-center-sub');
   let skillIndex = 0;
 
   if (skillText) {
-    if (reduceMotion) {
-      skillText.textContent = skills[0];
-    } else {
-      setInterval(() => {
-        skillText.classList.add('is-fading');
-        setTimeout(() => {
-          skillIndex = (skillIndex + 1) % skills.length;
-          skillText.textContent = skills[skillIndex];
-          requestAnimationFrame(() => skillText.classList.remove('is-fading'));
-        }, 320);
-      }, 2400);
-    }
+    const showSkill = (skill) => {
+      skillText.textContent = skill.name;
+      if (skillSub) skillSub.textContent = skill.sub;
+    };
+
+    showSkill(skills[0]);
+
+    setInterval(() => {
+      skillText.classList.add('is-sliding-out');
+      if (skillSub) skillSub.classList.add('is-sliding-out');
+
+      setTimeout(() => {
+        skillIndex = (skillIndex + 1) % skills.length;
+        showSkill(skills[skillIndex]);
+
+        skillText.classList.remove('is-sliding-out');
+        if (skillSub) skillSub.classList.remove('is-sliding-out');
+        skillText.classList.add('is-sliding-in');
+        if (skillSub) skillSub.classList.add('is-sliding-in');
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            skillText.classList.remove('is-sliding-in');
+            if (skillSub) skillSub.classList.remove('is-sliding-in');
+          });
+        });
+      }, 350);
+    }, 2400);
   }
+
+  /* Public skills are rendered by index.html from the Skills API. */
 
   /* ---------- Projects ---------- */
   const projectsGrid = document.getElementById('projects-grid');
@@ -352,6 +380,217 @@
       }
     });
   }
+
+
+  /* ---------- AI Assistant Chatbot ---------- */
+  const aiChat = document.getElementById('ai-chat');
+  const aiChatToggle = document.getElementById('ai-chat-toggle');
+  const aiChatClose = document.getElementById('ai-chat-close');
+  const aiChatPanel = document.getElementById('ai-chat-panel');
+  const aiChatMessages = document.getElementById('ai-chat-messages');
+  const aiChatForm = document.getElementById('ai-chat-form');
+  const aiChatInput = document.getElementById('ai-chat-input');
+  const aiChatQuick = document.getElementById('ai-chat-quick');
+
+  function setChatOpen(open) {
+    if (!aiChat || !aiChatToggle || !aiChatPanel) return;
+    aiChat.classList.toggle('open', open);
+    aiChatToggle.setAttribute('aria-expanded', String(open));
+    aiChatPanel.setAttribute('aria-hidden', String(!open));
+    if (open && aiChatInput) setTimeout(() => aiChatInput.focus(), 180);
+  }
+
+  /* ---------- Professional AI response rendering ---------- */
+  function installAssistantMarkdownStyles() {
+    if (document.getElementById('ai-assistant-pro-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'ai-assistant-pro-styles';
+    style.textContent = `
+      .ai-chat-bubble.ai-markdown { line-height: 1.62; }
+      .ai-chat-bubble.ai-markdown p { margin: 0 0 .72em; }
+      .ai-chat-bubble.ai-markdown p:last-child { margin-bottom: 0; }
+      .ai-chat-bubble.ai-markdown h1,
+      .ai-chat-bubble.ai-markdown h2,
+      .ai-chat-bubble.ai-markdown h3 { margin: .15em 0 .55em; line-height: 1.3; font-size: 1em; }
+      .ai-chat-bubble.ai-markdown ul,
+      .ai-chat-bubble.ai-markdown ol { margin: .35em 0 .75em 1.25em; padding: 0; }
+      .ai-chat-bubble.ai-markdown li { margin: .25em 0; }
+      .ai-chat-bubble.ai-markdown code { padding: .12em .35em; border-radius: 5px; font-size: .9em; background: rgba(255,255,255,.09); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+      .ai-chat-bubble.ai-markdown pre { margin: .7em 0; padding: .75em; overflow-x: auto; border-radius: 9px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.10); }
+      .ai-chat-bubble.ai-markdown pre code { padding: 0; background: transparent; white-space: pre; display: block; }
+      .ai-chat-bubble.ai-markdown a { text-decoration: underline; word-break: break-word; }
+      .ai-chat-bubble.ai-markdown blockquote { margin: .6em 0; padding-left: .8em; border-left: 3px solid currentColor; opacity: .9; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function renderAssistantMarkdown(source) {
+    installAssistantMarkdownStyles();
+    const text = String(source == null ? '' : source).replace(/\r\n?/g, '\n').trim();
+    let safe = escapeHtml(text);
+    const codeBlocks = [];
+    safe = safe.replace(/```([\w+#.-]*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+      const index = codeBlocks.length;
+      codeBlocks.push(`<pre><code>${code.trimEnd()}</code></pre>`);
+      return `@@AICODE${index}@@`;
+    });
+    const lines = safe.split('\n');
+    const out = [];
+    let paragraph = [];
+    let listType = null;
+    const inline = (value) => {
+      let s = value;
+      const inlineCode = [];
+      s = s.replace(/`([^`\n]+)`/g, (_, code) => { const i = inlineCode.length; inlineCode.push(`<code>${code}</code>`); return `@@AICINLINE${i}@@`; });
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
+      s = s.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+      s = s.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+      return s.replace(/@@AICINLINE(\d+)@@/g, (_, i) => inlineCode[Number(i)] || '');
+    };
+    const flushParagraph = () => { if (!paragraph.length) return; out.push(`<p>${inline(paragraph.join('<br>'))}</p>`); paragraph = []; };
+    const closeList = () => { if (listType) { out.push(`</${listType}>`); listType = null; } };
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) { flushParagraph(); closeList(); return; }
+      const codeMatch = trimmed.match(/^@@AICODE(\d+)@@$/);
+      if (codeMatch) { flushParagraph(); closeList(); out.push(codeBlocks[Number(codeMatch[1])] || ''); return; }
+      const heading = trimmed.match(/^#{1,3}\s+(.+)$/);
+      if (heading) { flushParagraph(); closeList(); const level = Math.min(3, heading[0].match(/^#+/)[0].length); out.push(`<h${level}>${inline(heading[1])}</h${level}>`); return; }
+      const bullet = trimmed.match(/^[-*•]\s+(.+)$/);
+      if (bullet) { flushParagraph(); if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul'; } out.push(`<li>${inline(bullet[1])}</li>`); return; }
+      const numbered = trimmed.match(/^\d+[.)]\s+(.+)$/);
+      if (numbered) { flushParagraph(); if (listType !== 'ol') { closeList(); out.push('<ol>'); listType = 'ol'; } out.push(`<li>${inline(numbered[1])}</li>`); return; }
+      if (trimmed.startsWith('> ')) { flushParagraph(); closeList(); out.push(`<blockquote>${inline(trimmed.slice(2))}</blockquote>`); return; }
+      closeList(); paragraph.push(trimmed);
+    });
+    flushParagraph(); closeList();
+    return out.join('') || '<p>I could not generate a response.</p>';
+  }
+
+  function addChatMessage(text, type) {
+    if (!aiChatMessages) return;
+    const row = document.createElement('div');
+    row.className = `ai-chat-message ${type}`;
+    const bubble = document.createElement('div');
+    bubble.className = `ai-chat-bubble${type === 'bot' ? ' ai-markdown' : ''}`;
+    if (type === 'bot') bubble.innerHTML = renderAssistantMarkdown(text);
+    else bubble.textContent = text;
+    row.appendChild(bubble);
+    aiChatMessages.appendChild(row);
+    aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+  }
+
+  function demoAssistantReply(message) {
+    const q = String(message || '').toLowerCase();
+
+    if (q.includes('project')) {
+      return 'Emamuddin has built AI, web and examination projects. You can open the Projects section to see the current projects, technologies, GitHub links and live demos.';
+    }
+    if (q.includes('skill') || q.includes('technology') || q.includes('tech')) {
+      return 'The portfolio currently covers programming, frontend, backend, database and tools. The Skills section is connected to the portfolio API, so your admin updates can appear there.';
+    }
+    if (q.includes('education') || q.includes('mca') || q.includes('bca')) {
+      return 'Emamuddin is pursuing an MCA at Techno India University and completed a BCA at Burdwan Raj College.';
+    }
+    if (q.includes('experience') || q.includes('internship') || q.includes('work')) {
+      return 'You can find the current work experience in the Experience section of the portfolio.';
+    }
+    if (q.includes('contact') || q.includes('email') || q.includes('hire')) {
+      return 'You can contact Emamuddin through the Contact section, email, LinkedIn or GitHub.';
+    }
+
+    return 'I can help visitors learn about Emamuddin, including projects, skills, education and experience. Try one of the quick questions below.';
+  }
+
+  let assistantInteractionId = null;
+  let assistantBusy = false;
+
+  async function handleChatMessage(message) {
+    const clean = String(message || '').trim();
+    if (!clean || assistantBusy) return;
+
+    addChatMessage(clean, 'user');
+    assistantBusy = true;
+
+    const sendButton = aiChatForm ? aiChatForm.querySelector('button[type="submit"]') : null;
+    if (sendButton) sendButton.disabled = true;
+
+    const thinkingRow = document.createElement('div');
+    thinkingRow.className = 'ai-chat-message bot';
+    thinkingRow.innerHTML = '<div class="ai-chat-bubble ai-markdown"><p>Thinking…</p></div>';
+    if (aiChatMessages) {
+      aiChatMessages.appendChild(thinkingRow);
+      aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/api/assistant`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: clean,
+          previous_interaction_id: assistantInteractionId
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || 'Assistant is unavailable right now.');
+      }
+
+      assistantInteractionId = data.interaction_id || assistantInteractionId;
+
+      if (thinkingRow.parentNode) thinkingRow.remove();
+      addChatMessage(data.reply || 'I could not generate a response.', 'bot');
+    } catch (err) {
+      if (thinkingRow.parentNode) thinkingRow.remove();
+      console.error('AI assistant error:', err);
+
+      // Keep a useful local fallback if the AI service is not configured.
+      addChatMessage(
+        err.message || demoAssistantReply(clean),
+        'bot'
+      );
+    } finally {
+      assistantBusy = false;
+      if (sendButton) sendButton.disabled = false;
+    }
+  }
+
+  if (aiChatToggle) {
+    aiChatToggle.addEventListener('click', () => {
+      const isOpen = aiChat && aiChat.classList.contains('open');
+      setChatOpen(!isOpen);
+    });
+  }
+
+  if (aiChatClose) aiChatClose.addEventListener('click', () => setChatOpen(false));
+
+  if (aiChatForm) {
+    aiChatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = aiChatInput ? aiChatInput.value.trim() : '';
+      if (!message) return;
+      if (aiChatInput) aiChatInput.value = '';
+      handleChatMessage(message);
+    });
+  }
+
+  if (aiChatQuick) {
+    aiChatQuick.querySelectorAll('[data-chat-prompt]').forEach((button) => {
+      button.addEventListener('click', () => {
+        handleChatMessage(button.dataset.chatPrompt || '');
+      });
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aiChat && aiChat.classList.contains('open')) {
+      setChatOpen(false);
+    }
+  });
 
   /* ---------- Init ---------- */
   loadProjects();

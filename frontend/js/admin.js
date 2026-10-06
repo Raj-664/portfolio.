@@ -8,6 +8,8 @@
   let csrf = null;
   let projects = [];
   let certificates = [];
+  let skills = [];
+  let experiences = [];
 
   const isLoginPage = !!document.getElementById('login-form');
 
@@ -35,6 +37,21 @@
     el.textContent = message;
     el.className = 'form-status ' + (isError ? 'error' : 'success');
   }
+
+  /* ---------- Password visibility ---------- */
+  document.querySelectorAll('[data-password-toggle]').forEach((toggle) => {
+    const input = document.getElementById(toggle.dataset.passwordToggle);
+    if (!input) return;
+
+    toggle.addEventListener('click', () => {
+      const isVisible = input.type === 'text';
+      input.type = isVisible ? 'password' : 'text';
+      toggle.classList.toggle('is-visible', !isVisible);
+      toggle.setAttribute('aria-pressed', String(!isVisible));
+      toggle.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+      toggle.setAttribute('title', isVisible ? 'Show password' : 'Hide password');
+    });
+  });
 
   /* ============================================================
      LOGIN PAGE
@@ -79,6 +96,72 @@
   }
 
   /* ============================================================
+     FORGOT PASSWORD PAGE
+     ============================================================ */
+  const forgotForm = document.getElementById('forgot-password-form');
+  if (forgotForm) {
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const status = document.getElementById('forgot-status');
+      const btn = document.getElementById('forgot-btn');
+
+      const username = document.getElementById('forgot-username').value.trim();
+      const recoveryKey = document.getElementById('recovery-key').value;
+      const nextPassword = document.getElementById('forgot-new-password').value;
+      const confirmPassword = document.getElementById('forgot-confirm-password').value;
+
+      status.textContent = '';
+      status.className = 'form-status';
+
+      if (!username || !recoveryKey || !nextPassword || !confirmPassword) {
+        showStatus(status, 'Please complete all fields.', true);
+        return;
+      }
+
+      if (nextPassword.length < 8) {
+        showStatus(status, 'New password must be at least 8 characters.', true);
+        return;
+      }
+
+      if (nextPassword !== confirmPassword) {
+        showStatus(status, 'New passwords do not match.', true);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Resetting...';
+
+      try {
+        const res = await fetch(API_BASE + '/api/admin/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            recovery_key: recoveryKey,
+            new_password: nextPassword
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Password reset failed.');
+
+        showStatus(status, data.message || 'Password reset successfully. Redirecting to login...');
+        forgotForm.reset();
+        setTimeout(() => {
+          window.location.href = '/admin/login';
+        }, 900);
+      } catch (err) {
+        showStatus(status, err.message || 'Password reset failed. Please try again.', true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Reset Password';
+      }
+    });
+
+    return;
+  }
+
+  /* ============================================================
      ADMIN DASHBOARD
      ============================================================ */
   const adminUser = document.getElementById('admin-user');
@@ -102,7 +185,15 @@
   }
 
   /* ---------- Tabs ---------- */
-  const titles = { dashboard: 'Dashboard', projects: 'Projects', certificates: 'Certificates', account: 'Account' };
+  const titles = {
+    dashboard: 'Dashboard',
+    projects: 'Projects',
+    skills: 'Skills',
+    experience: 'Experience',
+    certificates: 'Certificates',
+    resume: 'Resume',
+    account: 'Account'
+  };
 
   document.querySelectorAll('.admin-nav-link').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -144,19 +235,36 @@
 
   /* ---------- Dashboard ---------- */
   function renderDashboard() {
-    document.getElementById('stat-projects').textContent = projects.length;
-    document.getElementById('stat-certificates').textContent = certificates.length;
+    const projectStat = document.getElementById('stat-projects');
+    const techStat = document.getElementById('stat-technologies');
+    const certStat = document.getElementById('stat-certificates');
+
+    if (projectStat) projectStat.textContent = projects.length;
+
+    const technologySet = new Set();
+    projects.forEach((project) => {
+      (project.technologies || []).forEach((technology) => {
+        const value = String(technology || '').trim();
+        if (value) technologySet.add(value.toLowerCase());
+      });
+    });
+    if (techStat) techStat.textContent = technologySet.size;
+    if (certStat) certStat.textContent = certificates.length;
 
     const recentP = document.getElementById('recent-projects');
     const recentC = document.getElementById('recent-certificates');
 
-    recentP.innerHTML = projects.slice(0, 5).map((p) =>
-      `<li><span class="dash-item-title">${escapeHtml(p.title)}</span><span class="dash-item-meta">${escapeHtml(p.category || '')}</span></li>`
-    ).join('') || '<li class="empty-note">No projects yet.</li>';
+    if (recentP) {
+      recentP.innerHTML = projects.slice(0, 5).map((p) =>
+        `<li><span class="dash-item-title">${escapeHtml(p.title)}</span><span class="dash-item-meta">${escapeHtml(p.category || '')}</span></li>`
+      ).join('') || '<li class="empty-note">No projects yet.</li>';
+    }
 
-    recentC.innerHTML = certificates.slice(0, 5).map((c) =>
-      `<li><span class="dash-item-title">${escapeHtml(c.title)}</span><span class="dash-item-meta">${escapeHtml(c.date || '')}</span></li>`
-    ).join('') || '<li class="empty-note">No certificates yet.</li>';
+    if (recentC) {
+      recentC.innerHTML = certificates.slice(0, 5).map((c) =>
+        `<li><span class="dash-item-title">${escapeHtml(c.title)}</span><span class="dash-item-meta">${escapeHtml(c.date || '')}</span></li>`
+      ).join('') || '<li class="empty-note">No certificates yet.</li>';
+    }
   }
 
   /* ---------- Projects table ---------- */
@@ -197,20 +305,92 @@
     empty.hidden = certificates.length > 0;
   }
 
+  /* ---------- Skills table ---------- */
+  function renderSkillsTable() {
+    const body = document.getElementById('skills-table-body');
+    const empty = document.getElementById('skills-table-empty');
+    if (!body || !empty) return;
+
+    body.innerHTML = skills.map((skill) => `
+      <tr>
+        <td class="table-title">${escapeHtml(skill.name || skill.title || '')}</td>
+        <td>${escapeHtml(skill.category || '—')}</td>
+        <td>${escapeHtml(skill.level || '—')}</td>
+        <td class="col-actions">
+          <div class="table-actions">
+            <button class="btn btn-sm btn-outline" data-edit-skill="${skill.id}">Edit</button>
+            <button class="btn btn-sm btn-danger" data-delete-skill="${skill.id}">Delete</button>
+          </div>
+        </td>
+      </tr>`).join('');
+    empty.hidden = skills.length > 0;
+  }
+
+  /* ---------- Experience table ---------- */
+  function renderExperienceTable() {
+    const body = document.getElementById('experience-table-body');
+    const empty = document.getElementById('experience-table-empty');
+    if (!body || !empty) return;
+
+    body.innerHTML = experiences.map((item) => {
+      const period = [item.start_date || item.start, item.end_date || item.end]
+        .filter(Boolean)
+        .join(' — ');
+
+      return `
+      <tr>
+        <td class="table-title">${escapeHtml(item.role || item.title || '')}</td>
+        <td>${escapeHtml(item.company || '—')}</td>
+        <td>${escapeHtml(period || '—')}</td>
+        <td class="col-actions">
+          <div class="table-actions">
+            <button class="btn btn-sm btn-outline" data-edit-experience="${item.id}">Edit</button>
+            <button class="btn btn-sm btn-danger" data-delete-experience="${item.id}">Delete</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+    empty.hidden = experiences.length > 0;
+  }
+
+  async function loadOptionalCollection(url) {
+    try {
+      const res = await apiFetch(url);
+      if (!res.ok) return [];
+      const data = await res.json();
+      return Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
+    } catch (err) {
+      console.warn(`Could not load ${url}:`, err);
+      return [];
+    }
+  }
+
   async function loadAll() {
     try {
-      const [pRes, cRes] = await Promise.all([
+      const [pRes, cRes, sData, eData] = await Promise.all([
         apiFetch('/api/projects'),
         apiFetch('/api/certificates'),
+        loadOptionalCollection('/api/skills'),
+        loadOptionalCollection('/api/experience')
       ]);
+
+      if (!pRes.ok) throw new Error('Could not load projects.');
+      if (!cRes.ok) throw new Error('Could not load certificates.');
+
       projects = await pRes.json();
       certificates = await cRes.json();
+      skills = sData;
+      experiences = eData;
     } catch (err) {
       console.error('Load failed:', err);
     }
+
     renderDashboard();
     renderProjectsTable();
     renderCertsTable();
+    renderSkillsTable();
+    renderExperienceTable();
+    await loadResumeInfo();
   }
 
   /* ---------- Project add/edit ---------- */
@@ -293,6 +473,166 @@
     }
   });
 
+  /* ---------- Skills add/edit ---------- */
+  const skillForm = document.getElementById('skill-form');
+  const skillModalTitle = document.getElementById('skill-modal-title');
+
+  if (skillForm) {
+    document.getElementById('add-skill-btn').addEventListener('click', () => {
+      skillForm.reset();
+      document.getElementById('skill-id').value = '';
+      document.getElementById('skill-form-status').textContent = '';
+      document.getElementById('skill-form-status').className = 'form-status';
+      skillModalTitle.textContent = 'Add Skill';
+      document.getElementById('skill-submit').textContent = 'Save Skill';
+      openModal('skill-modal');
+    });
+
+    document.getElementById('skills-table-body').addEventListener('click', (e) => {
+      const editBtn = e.target.closest('[data-edit-skill]');
+      if (!editBtn) return;
+
+      const skill = skills.find((x) => x.id === Number(editBtn.dataset.editSkill));
+      if (!skill) return;
+
+      skillForm.reset();
+      document.getElementById('skill-id').value = skill.id;
+      document.getElementById('s-name').value = skill.name || skill.title || '';
+      document.getElementById('s-category').value = skill.category || '';
+      document.getElementById('s-level').value = skill.level || '';
+      document.getElementById('skill-form-status').textContent = '';
+      document.getElementById('skill-form-status').className = 'form-status';
+      skillModalTitle.textContent = 'Edit Skill';
+      document.getElementById('skill-submit').textContent = 'Update Skill';
+      openModal('skill-modal');
+    });
+
+    skillForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('skill-form-status');
+      status.textContent = '';
+      status.className = 'form-status';
+
+      const id = document.getElementById('skill-id').value;
+      const name = document.getElementById('s-name').value.trim();
+      if (!name) {
+        showStatus(status, 'Skill name is required.', true);
+        return;
+      }
+
+      const payload = {
+        name,
+        category: document.getElementById('s-category').value.trim(),
+        level: document.getElementById('s-level').value.trim()
+      };
+
+      const submitBtn = document.getElementById('skill-submit');
+      submitBtn.disabled = true;
+      const original = submitBtn.textContent;
+      submitBtn.textContent = 'Saving...';
+
+      try {
+        const res = await apiFetch(id ? `/api/skills/${id}` : '/api/skills', {
+          method: id ? 'PUT' : 'POST',
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Save failed.');
+
+        closeModal('skill-modal');
+        await loadAll();
+      } catch (err) {
+        showStatus(status, err.message || 'Save failed. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+      }
+    });
+  }
+
+  /* ---------- Experience add/edit ---------- */
+  const experienceForm = document.getElementById('experience-form');
+  const experienceModalTitle = document.getElementById('experience-modal-title');
+
+  if (experienceForm) {
+    document.getElementById('add-experience-btn').addEventListener('click', () => {
+      experienceForm.reset();
+      document.getElementById('experience-id').value = '';
+      document.getElementById('experience-form-status').textContent = '';
+      document.getElementById('experience-form-status').className = 'form-status';
+      experienceModalTitle.textContent = 'Add Experience';
+      document.getElementById('experience-submit').textContent = 'Save Experience';
+      openModal('experience-modal');
+    });
+
+    document.getElementById('experience-table-body').addEventListener('click', (e) => {
+      const editBtn = e.target.closest('[data-edit-experience]');
+      if (!editBtn) return;
+
+      const item = experiences.find((x) => x.id === Number(editBtn.dataset.editExperience));
+      if (!item) return;
+
+      experienceForm.reset();
+      document.getElementById('experience-id').value = item.id;
+      document.getElementById('e-role').value = item.role || item.title || '';
+      document.getElementById('e-company').value = item.company || '';
+      document.getElementById('e-start').value = item.start_date || item.start || '';
+      document.getElementById('e-end').value = item.end_date || item.end || '';
+      document.getElementById('e-description').value = item.description || '';
+      document.getElementById('experience-form-status').textContent = '';
+      document.getElementById('experience-form-status').className = 'form-status';
+      experienceModalTitle.textContent = 'Edit Experience';
+      document.getElementById('experience-submit').textContent = 'Update Experience';
+      openModal('experience-modal');
+    });
+
+    experienceForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('experience-form-status');
+      status.textContent = '';
+      status.className = 'form-status';
+
+      const id = document.getElementById('experience-id').value;
+      const role = document.getElementById('e-role').value.trim();
+      const company = document.getElementById('e-company').value.trim();
+
+      if (!role || !company) {
+        showStatus(status, 'Role and company are required.', true);
+        return;
+      }
+
+      const payload = {
+        role,
+        company,
+        start_date: document.getElementById('e-start').value.trim(),
+        end_date: document.getElementById('e-end').value.trim(),
+        description: document.getElementById('e-description').value.trim()
+      };
+
+      const submitBtn = document.getElementById('experience-submit');
+      submitBtn.disabled = true;
+      const original = submitBtn.textContent;
+      submitBtn.textContent = 'Saving...';
+
+      try {
+        const res = await apiFetch(id ? `/api/experience/${id}` : '/api/experience', {
+          method: id ? 'PUT' : 'POST',
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Save failed.');
+
+        closeModal('experience-modal');
+        await loadAll();
+      } catch (err) {
+        showStatus(status, err.message || 'Save failed. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+      }
+    });
+  }
+
   /* ---------- Certificate add/edit ---------- */
   const certForm = document.getElementById('cert-form');
   const certModalTitle = document.getElementById('cert-modal-title');
@@ -367,6 +707,92 @@
     }
   });
 
+  /* ---------- Resume ---------- */
+  async function loadResumeInfo() {
+    const nameEl = document.getElementById('resume-current-name');
+    if (!nameEl) return;
+
+    try {
+      const res = await apiFetch('/api/admin/resume');
+      if (!res.ok) {
+        nameEl.textContent = 'Upload your latest resume PDF. The newest uploaded resume will be used by the public portfolio.';
+        return;
+      }
+
+      const data = await res.json();
+      if (data.filename || data.url) {
+        nameEl.textContent = `Current resume: ${data.filename || 'Uploaded resume'}`;
+      }
+    } catch (err) {
+      console.warn('Could not load resume information:', err);
+    }
+  }
+
+  const updateResumeBtn = document.getElementById('update-resume-btn');
+  const resumeForm = document.getElementById('resume-form');
+
+  if (updateResumeBtn && resumeForm) {
+    updateResumeBtn.addEventListener('click', () => {
+      resumeForm.reset();
+      const status = document.getElementById('resume-form-status');
+      status.textContent = '';
+      status.className = 'form-status';
+      openModal('resume-modal');
+    });
+
+    resumeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const status = document.getElementById('resume-form-status');
+      const fileInput = document.getElementById('resume-file');
+      const file = fileInput.files && fileInput.files[0];
+
+      status.textContent = '';
+      status.className = 'form-status';
+
+      if (!file) {
+        showStatus(status, 'Please select a resume PDF.', true);
+        return;
+      }
+
+      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        showStatus(status, 'Only PDF resumes are allowed.', true);
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        showStatus(status, 'Resume must be 10 MB or smaller.', true);
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append('resume', file);
+
+      const submitBtn = document.getElementById('resume-submit');
+      submitBtn.disabled = true;
+      const original = submitBtn.textContent;
+      submitBtn.textContent = 'Uploading...';
+
+      try {
+        const res = await apiFetch('/api/admin/resume', {
+          method: 'POST',
+          body: fd
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Resume upload failed.');
+
+        closeModal('resume-modal');
+        showStatus(document.getElementById('resume-status'), data.message || 'Resume updated successfully.');
+        await loadResumeInfo();
+      } catch (err) {
+        showStatus(status, err.message || 'Resume upload failed. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+      }
+    });
+  }
+
   /* ---------- Delete with confirm ---------- */
   let confirmAction = null;
   const confirmModal = document.getElementById('confirm-modal');
@@ -398,6 +824,31 @@
     if (!c) return;
     askDelete('Delete Certificate', `Delete "${c.title}"? This cannot be undone.`, () => {
       return apiFetch(`/api/certificates/${c.id}`, { method: 'DELETE' });
+    });
+  });
+
+
+  document.getElementById('skills-table-body').addEventListener('click', (e) => {
+    const del = e.target.closest('[data-delete-skill]');
+    if (!del) return;
+    const skill = skills.find((x) => x.id === Number(del.dataset.deleteSkill));
+    if (!skill) return;
+
+    const name = skill.name || skill.title || 'this skill';
+    askDelete('Delete Skill', `Delete "${name}"? This cannot be undone.`, () => {
+      return apiFetch(`/api/skills/${skill.id}`, { method: 'DELETE' });
+    });
+  });
+
+  document.getElementById('experience-table-body').addEventListener('click', (e) => {
+    const del = e.target.closest('[data-delete-experience]');
+    if (!del) return;
+    const item = experiences.find((x) => x.id === Number(del.dataset.deleteExperience));
+    if (!item) return;
+
+    const role = item.role || item.title || 'this experience';
+    askDelete('Delete Experience', `Delete "${role}"? This cannot be undone.`, () => {
+      return apiFetch(`/api/experience/${item.id}`, { method: 'DELETE' });
     });
   });
 

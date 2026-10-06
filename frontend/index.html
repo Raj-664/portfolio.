@@ -30,8 +30,8 @@
       <a href="#learning"><span class="side-link-icon">03</span>Learning</a>
       <a href="#contact"><span class="side-link-icon">04</span>Contact</a>
       <a href="#certificates"><span class="side-link-icon">05</span>Certificates</a>
-      <a href="https://portfolio-api-bmyk.onrender.com/admin/login"><span class="side-link-icon">06</span>Admin Panel</a>
-      <a href="assets/resume.pdf" class="side-resume" download>
+      <a href="http://127.0.0.1:5000/admin/login"><span class="side-link-icon">06</span>Admin Panel</a>
+      <a href="#" class="side-resume" data-dynamic-resume download>
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
         Download Resume
       </a>
@@ -84,14 +84,14 @@
           <div class="hero-actions reveal-load d6">
             <a href="#projects" class="btn btn-primary">View Projects</a>
             <a href="#contact" class="btn btn-ghost">Get In Touch</a>
-            <a href="assets/resume.pdf" class="btn btn-resume" download>
+            <a href="#" class="btn btn-resume" data-dynamic-resume download>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
               Download Resume
             </a>
           </div>
           <div class="hero-stats reveal-load d7">
-            <div class="stat"><strong>3+</strong><span>Projects Built</span></div>
-            <div class="stat"><strong>12+</strong><span>Technologies</span></div>
+            <div class="stat"><strong id="public-project-count">0+</strong><span>Projects Built</span></div>
+            <div class="stat"><strong id="public-tech-count">0+</strong><span>Technologies</span></div>
             <div class="stat"><strong>100%</strong><span>Learning Attitude</span></div>
           </div>
         </div>
@@ -127,48 +127,8 @@
         <p class="section-label">01 · skills</p>
         <h2 class="section-title">My tech toolkit</h2>
         <p class="section-sub">The languages and tools I use to build products end-to-end.</p>
-        <div class="skills-cats">
-          <div class="skill-cat reveal">
-            <h3 class="skill-cat-title"><span class="skill-cat-icon py">P</span>Programming</h3>
-            <div class="skill-cat-chips">
-              <span class="chip">Python</span>
-              <span class="chip">Java</span>
-              <span class="chip">C</span>
-              <span class="chip">JavaScript</span>
-            </div>
-          </div>
-          <div class="skill-cat reveal">
-            <h3 class="skill-cat-title"><span class="skill-cat-icon fl">F</span>Backend</h3>
-            <div class="skill-cat-chips">
-              <span class="chip">Flask</span>
-              <span class="chip">REST API</span>
-              <span class="chip">PHP</span>
-            </div>
-          </div>
-          <div class="skill-cat reveal">
-            <h3 class="skill-cat-title"><span class="skill-cat-icon db">S</span>Database</h3>
-            <div class="skill-cat-chips">
-              <span class="chip">MySQL</span>
-              <span class="chip">SQL</span>
-            </div>
-          </div>
-          <div class="skill-cat reveal">
-            <h3 class="skill-cat-title"><span class="skill-cat-icon fe">H</span>Frontend</h3>
-            <div class="skill-cat-chips">
-              <span class="chip">HTML</span>
-              <span class="chip">CSS</span>
-              <span class="chip">JavaScript</span>
-            </div>
-          </div>
-          <div class="skill-cat reveal">
-            <h3 class="skill-cat-title"><span class="skill-cat-icon tl">G</span>Tools</h3>
-            <div class="skill-cat-chips">
-              <span class="chip">Git</span>
-              <span class="chip">GitHub</span>
-              <span class="chip">VS Code</span>
-            </div>
-          </div>
-        </div>
+        <div class="skills-cats" id="public-skills"></div>
+
       </div>
     </section>
 
@@ -189,23 +149,8 @@
       <div class="container">
         <p class="section-label">03 · experience</p>
         <h2 class="section-title">Where I've worked</h2>
-        <div class="timeline">
-          <div class="timeline-item reveal">
-            <div class="timeline-dot"></div>
-            <div class="timeline-body">
-              <div class="timeline-head">
-                <h3>Web Developer &amp; Website Management Intern</h3>
-                <span class="timeline-org">The Digital India Tech</span>
-                <span class="timeline-date">Internship</span>
-              </div>
-              <p>
-                Built and maintained websites, implemented responsive layouts,
-                optimized site performance and collaborated with teams to ship
-                polished, production-ready web pages.
-              </p>
-            </div>
-          </div>
-        </div>
+        <div class="timeline" id="public-experience"></div>
+
       </div>
     </section>
 
@@ -359,7 +304,7 @@
                 <span class="contact-value">@Raj-664</span>
               </div>
             </a>
-            <a class="contact-link reveal" href="assets/resume.pdf" download>
+            <a class="contact-link reveal" href="#" data-dynamic-resume download>
               <span class="contact-icon">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
               </span>
@@ -411,6 +356,75 @@
     </div>
   </footer>
 
+
+  <!-- AI Assistant Chatbot -->
+  <div class="ai-chat" id="ai-chat">
+    <button
+      class="ai-chat-toggle"
+      id="ai-chat-toggle"
+      type="button"
+      aria-label="Open AI Assistant"
+      aria-expanded="false"
+      title="AI Assistant"
+    >
+      <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3a8 8 0 0 0-8 8v2a3 3 0 0 0 3 3h1v-5H5"/>
+        <path d="M12 3a8 8 0 0 1 8 8v2a3 3 0 0 1-3 3h-1v-5h3"/>
+        <path d="M8 16c.7 2 2.1 3 4 3s3.3-1 4-3"/>
+        <path d="M12 21v-2"/>
+      </svg>
+      <span class="ai-chat-dot" aria-hidden="true"></span>
+    </button>
+
+    <section class="ai-chat-panel" id="ai-chat-panel" aria-hidden="true" aria-label="AI Assistant">
+      <header class="ai-chat-head">
+        <div class="ai-chat-identity">
+          <div class="ai-chat-avatar" aria-hidden="true">AI</div>
+          <div>
+            <strong>Emamuddin AI</strong>
+            <span><i></i> Portfolio Assistant</span>
+          </div>
+        </div>
+        <button class="ai-chat-close" id="ai-chat-close" type="button" aria-label="Close AI Assistant">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="ai-chat-messages" id="ai-chat-messages" aria-live="polite">
+        <div class="ai-chat-message bot">
+          <div class="ai-chat-bubble">
+            Hi! I'm Emamuddin's portfolio assistant. Ask me about projects, skills, experience, or education.
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-chat-quick" id="ai-chat-quick">
+        <button type="button" data-chat-prompt="Tell me about Emamuddin's projects">Projects</button>
+        <button type="button" data-chat-prompt="What skills does Emamuddin have?">Skills</button>
+        <button type="button" data-chat-prompt="Tell me about Emamuddin's education">Education</button>
+      </div>
+
+      <form class="ai-chat-form" id="ai-chat-form" autocomplete="off">
+        <label class="sr-only" for="ai-chat-input">Message the AI assistant</label>
+        <input
+          id="ai-chat-input"
+          type="text"
+          maxlength="500"
+          placeholder="Ask something..."
+          aria-label="Message the AI assistant"
+        />
+        <button type="submit" aria-label="Send message" title="Send message">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m22 2-7 20-4-9-9-4Z"/>
+            <path d="M22 2 11 13"/>
+          </svg>
+        </button>
+      </form>
+    </section>
+  </div>
+
   <!-- Project details modal -->
   <div class="modal-overlay" id="project-modal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -422,5 +436,240 @@
   </div>
 
   <script src="js/main.js"></script>
+
+  <script>
+    (function () {
+      const API = {
+        skills: "/api/skills",
+        experience: "/api/experience",
+        resume: "/api/resume",
+        projects: "/api/projects",
+        certificates: "/api/certificates"
+      };
+
+      const esc = (value) => String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+      }[ch]));
+
+      function categoryClass(category) {
+        const c = String(category || "").toLowerCase();
+        if (c.includes("program")) return "py";
+        if (c.includes("backend") || c.includes("api") || c.includes("server")) return "fl";
+        if (c.includes("database") || c.includes("data") || c.includes("sql")) return "db";
+        if (c.includes("front")) return "fe";
+        return "tl";
+      }
+
+      function renderSkills(skills) {
+        const root = document.getElementById("public-skills");
+        if (!root) return;
+
+        /*
+         * These containers NEVER change position.
+         * New skills are appended to the end of their existing category.
+         * No extra category card is created for an unknown category.
+         */
+        const categories = [
+          { key: "programming", name: "Programming", icon: "P", iconClass: "py" },
+          { key: "frontend", name: "Frontend", icon: "F", iconClass: "fe" },
+          { key: "backend", name: "Backend", icon: "B", iconClass: "fl" },
+          { key: "database", name: "Database", icon: "D", iconClass: "db" },
+          { key: "tools", name: "Tools", icon: "T", iconClass: "tl" },
+          { key: "apis models", name: "APIs Models", icon: "G", iconClass: "ga" }
+        ];
+
+        const normalizeCategory = (value) => {
+          const raw = String(value || "").trim().toLowerCase();
+          if (raw === "programming" || raw.includes("program")) return "programming";
+          if (raw === "frontend" || raw.includes("front")) return "frontend";
+          if (raw === "backend" || raw.includes("back")) return "backend";
+          if (raw === "database" || raw.includes("data") || raw === "sql") return "database";
+          if (raw === "tools" || raw === "tool") return "tools";
+          if (
+            raw === "google api" ||
+            raw === "google apis" ||
+            raw.includes("google api") ||
+            raw === "apis" ||
+            raw === "api" ||
+            raw === "models" ||
+            raw === "apis models"
+          ) return "apis models";
+          return "";
+        };
+
+        const grouped = new Map(categories.map(c => [c.key, []]));
+
+        (Array.isArray(skills) ? skills : []).forEach(skill => {
+          const categoryKey = normalizeCategory(skill.category);
+          if (!categoryKey) return;
+
+          let name = String(skill.name || "").trim();
+          if (!name) return;
+
+          // JavaScript is shown only as JS under Frontend.
+          if (categoryKey === "programming" && name.toLowerCase() === "javascript") {
+            return;
+          }
+          if (categoryKey === "frontend" && name.toLowerCase() === "javascript") {
+            name = "JS";
+          }
+
+          grouped.get(categoryKey).push({
+            ...skill,
+            name
+          });
+        });
+
+        /*
+         * Keep the requested permanent order only for the initial
+         * Programming and Frontend skills. Anything newly added is kept
+         * after those fixed items, in database/insertion order.
+         */
+        const fixedOrder = {
+          programming: ["python", "java", "c", "c++"],
+          frontend: ["html", "css", "js"]
+        };
+
+        grouped.forEach((items, key) => {
+          if (!fixedOrder[key]) return;
+
+          const preferred = [];
+          const extra = [];
+
+          items.forEach(item => {
+            const name = item.name.toLowerCase();
+            const index = fixedOrder[key].indexOf(name);
+            if (index === -1) {
+              extra.push(item);
+            } else {
+              preferred[index] = item;
+            }
+          });
+
+          grouped.set(
+            key,
+            fixedOrder[key]
+              .map((_, i) => preferred[i])
+              .filter(Boolean)
+              .concat(extra)
+          );
+        });
+
+        root.innerHTML = "";
+
+        categories.forEach(category => {
+          const items = grouped.get(category.key) || [];
+          const card = document.createElement("div");
+          card.className = "skill-cat reveal visible";
+
+          const chips = items.map(item =>
+            `<span class="chip" title="${esc(item.level || "")}">${esc(item.name)}</span>`
+          ).join("");
+
+          card.innerHTML = `
+            <h3 class="skill-cat-title">
+              <span class="skill-cat-icon ${category.iconClass}">${category.icon}</span>${category.name}
+            </h3>
+            <div class="skill-cat-chips">${chips}</div>`;
+
+          root.appendChild(card);
+        });
+      }
+
+      function renderExperience(items) {
+        const root = document.getElementById("public-experience");
+        if (!root) return;
+        root.innerHTML = "";
+
+        items.forEach(item => {
+          const date = [item.start_date, item.end_date].filter(Boolean).join(" – ");
+          const node = document.createElement("div");
+          node.className = "timeline-item reveal";
+          node.innerHTML = `
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>${esc(item.role)}</h3>
+                <span class="timeline-org">${esc(item.company)}</span>
+                ${date ? `<span class="timeline-date">${esc(date)}</span>` : ""}
+              </div>
+              ${item.description ? `<p>${esc(item.description).replace(/\n/g, "<br>")}</p>` : ""}
+            </div>`;
+          root.appendChild(node);
+        });
+      }
+
+      function setResume(url, filename) {
+        document.querySelectorAll("[data-dynamic-resume]").forEach(link => {
+          if (!url) return;
+
+          // Always use the backend's current resume endpoint so replacing
+          // the resume in Admin automatically changes the public download.
+          const currentResumeUrl = new URL("/resume", window.location.origin).href;
+          link.href = currentResumeUrl;
+          link.setAttribute("download", filename || "resume.pdf");
+          link.removeAttribute("aria-disabled");
+        });
+      }
+
+      async function loadPublicPortfolioData() {
+        try {
+          const [skillsRes, expRes, resumeRes, projectsRes, certsRes] = await Promise.all([
+            fetch(API.skills, { cache: "no-store" }),
+            fetch(API.experience, { cache: "no-store" }),
+            fetch(API.resume, { cache: "no-store" }),
+            fetch(API.projects, { cache: "no-store" }),
+            fetch(API.certificates, { cache: "no-store" })
+          ]);
+
+          if (skillsRes.ok) {
+            const skills = await skillsRes.json();
+            renderSkills(Array.isArray(skills) ? skills : []);
+          }
+
+          if (expRes.ok) {
+            const experience = await expRes.json();
+            renderExperience(Array.isArray(experience) ? experience : []);
+          }
+
+          if (resumeRes.ok) {
+            const resume = await resumeRes.json();
+            setResume(resume.url || "", resume.filename || "resume.pdf");
+          }
+
+          if (projectsRes.ok) {
+            const projects = await projectsRes.json();
+            const list = Array.isArray(projects) ? projects : [];
+            const techs = new Set();
+            list.forEach(project => {
+              (Array.isArray(project.technologies) ? project.technologies : []).forEach(t => {
+                const value = String(t || "").trim().toLowerCase();
+                if (value) techs.add(value);
+              });
+            });
+            const projectCount = document.getElementById("public-project-count");
+            const techCount = document.getElementById("public-tech-count");
+            if (projectCount) projectCount.textContent = `${list.length}+`;
+            if (techCount) techCount.textContent = `${techs.size}+`;
+          }
+
+          if (certsRes.ok) {
+            const certificates = await certsRes.json();
+            // The certificates section is already rendered by main.js.
+            // This request is intentionally kept here so the public count can
+            // be extended without changing the existing certificate renderer.
+          }
+        } catch (error) {
+          console.warn("Public portfolio dynamic data could not be loaded.", error);
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadPublicPortfolioData);
+      } else {
+        loadPublicPortfolioData();
+      }
+    })();
+  </script>
 </body>
 </html>

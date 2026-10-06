@@ -19,7 +19,10 @@
       <nav class="admin-nav">
         <button class="admin-nav-link active" data-tab="dashboard">Dashboard</button>
         <button class="admin-nav-link" data-tab="projects">Projects</button>
+        <button class="admin-nav-link" data-tab="skills">Skills</button>
+        <button class="admin-nav-link" data-tab="experience">Experience</button>
         <button class="admin-nav-link" data-tab="certificates">Certificates</button>
+        <button class="admin-nav-link" data-tab="resume">Resume</button>
         <button class="admin-nav-link" data-tab="account">Account</button>
       </nav>
       <div class="admin-side-foot">
@@ -42,6 +45,10 @@
             <div class="stat-card">
               <span class="stat-card-label">Total Projects</span>
               <strong class="stat-card-value" id="stat-projects">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-label">Total Technologies</span>
+              <strong class="stat-card-value" id="stat-technologies">0</strong>
             </div>
             <div class="stat-card">
               <span class="stat-card-label">Total Certificates</span>
@@ -82,6 +89,50 @@
           <p class="empty-note" id="projects-table-empty" hidden>No projects yet. Add your first project.</p>
         </section>
 
+        <!-- SKILLS -->
+        <section class="tab-panel" id="tab-skills">
+          <div class="panel-head">
+            <h2>Skills</h2>
+            <button class="btn btn-primary" id="add-skill-btn">+ Add Skill</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Skill</th>
+                  <th>Category</th>
+                  <th>Level</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="skills-table-body"></tbody>
+            </table>
+          </div>
+          <p class="empty-note" id="skills-table-empty" hidden>No skills yet. Add your first skill.</p>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section class="tab-panel" id="tab-experience">
+          <div class="panel-head">
+            <h2>Experience</h2>
+            <button class="btn btn-primary" id="add-experience-btn">+ Add Experience</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Company</th>
+                  <th>Period</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="experience-table-body"></tbody>
+            </table>
+          </div>
+          <p class="empty-note" id="experience-table-empty" hidden>No experience yet. Add your first experience.</p>
+        </section>
+
         <!-- CERTIFICATES -->
         <section class="tab-panel" id="tab-certificates">
           <div class="panel-head">
@@ -102,6 +153,18 @@
             </table>
           </div>
           <p class="empty-note" id="certs-table-empty" hidden>No certificates yet. Add your first certificate.</p>
+        </section>
+
+        <!-- RESUME -->
+        <section class="tab-panel" id="tab-resume">
+          <div class="dash-card account-card">
+            <div class="panel-head">
+              <h2>Resume</h2>
+              <button class="btn btn-primary" id="update-resume-btn">Update Resume</button>
+            </div>
+            <p class="field-hint" id="resume-current-name">Upload your latest resume PDF. The newest uploaded resume will be used by the public portfolio.</p>
+            <p class="form-status" id="resume-status" role="status" aria-live="polite"></p>
+          </div>
         </section>
 
         <!-- ACCOUNT -->
@@ -181,6 +244,38 @@
     </div>
   </div>
 
+  <!-- Skill modal -->
+  <div class="admin-modal-overlay" id="skill-modal" aria-hidden="true">
+    <div class="admin-modal">
+      <div class="admin-modal-head">
+        <h3 id="skill-modal-title">Add Skill</h3>
+        <button class="modal-x" data-close="skill-modal" aria-label="Close">&times;</button>
+      </div>
+      <form id="skill-form" novalidate>
+        <input type="hidden" id="skill-id" />
+        <div class="form-group">
+          <label for="s-name">Skill *</label>
+          <input type="text" id="s-name" maxlength="120" required placeholder="e.g. Python" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="s-category">Category</label>
+            <input type="text" id="s-category" maxlength="80" placeholder="e.g. Programming" />
+          </div>
+          <div class="form-group">
+            <label for="s-level">Level</label>
+            <input type="text" id="s-level" maxlength="80" placeholder="e.g. Advanced" />
+          </div>
+        </div>
+        <p class="form-status" id="skill-form-status" role="status" aria-live="polite"></p>
+        <div class="admin-modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="skill-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="skill-submit">Save Skill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Certificate modal -->
   <div class="admin-modal-overlay" id="cert-modal" aria-hidden="true">
     <div class="admin-modal">
@@ -213,6 +308,68 @@
         <div class="admin-modal-actions">
           <button type="button" class="btn btn-ghost" data-close="cert-modal">Cancel</button>
           <button type="submit" class="btn btn-primary" id="cert-submit">Save Certificate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Experience modal -->
+  <div class="admin-modal-overlay" id="experience-modal" aria-hidden="true">
+    <div class="admin-modal">
+      <div class="admin-modal-head">
+        <h3 id="experience-modal-title">Add Experience</h3>
+        <button class="modal-x" data-close="experience-modal" aria-label="Close">&times;</button>
+      </div>
+      <form id="experience-form" novalidate>
+        <input type="hidden" id="experience-id" />
+        <div class="form-group">
+          <label for="e-role">Role *</label>
+          <input type="text" id="e-role" maxlength="160" required placeholder="e.g. Web Developer Intern" />
+        </div>
+        <div class="form-group">
+          <label for="e-company">Company *</label>
+          <input type="text" id="e-company" maxlength="160" required placeholder="e.g. The Digital India" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="e-start">Start</label>
+            <input type="text" id="e-start" maxlength="80" placeholder="e.g. Jul 2025" />
+          </div>
+          <div class="form-group">
+            <label for="e-end">End</label>
+            <input type="text" id="e-end" maxlength="80" placeholder="e.g. Present" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="e-description">Description</label>
+          <textarea id="e-description" rows="4" maxlength="4000" placeholder="Describe your responsibilities and achievements."></textarea>
+        </div>
+        <p class="form-status" id="experience-form-status" role="status" aria-live="polite"></p>
+        <div class="admin-modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="experience-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="experience-submit">Save Experience</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Resume modal -->
+  <div class="admin-modal-overlay" id="resume-modal" aria-hidden="true">
+    <div class="admin-modal small">
+      <div class="admin-modal-head">
+        <h3 id="resume-modal-title">Update Resume</h3>
+        <button class="modal-x" data-close="resume-modal" aria-label="Close">&times;</button>
+      </div>
+      <form id="resume-form" novalidate>
+        <div class="form-group">
+          <label for="resume-file">New resume PDF *</label>
+          <input type="file" id="resume-file" accept="application/pdf" required />
+          <small class="field-hint">PDF only · max 10 MB</small>
+        </div>
+        <p class="form-status" id="resume-form-status" role="status" aria-live="polite"></p>
+        <div class="admin-modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="resume-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="resume-submit">Upload Resume</button>
         </div>
       </form>
     </div>

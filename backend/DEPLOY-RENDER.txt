@@ -1,0 +1,22 @@
+PORTFOLIO BACKEND - RENDER + TIDB
+
+Render service settings:
+- Root Directory: backend
+- Runtime: Python 3
+- Build Command: pip install -r requirements.txt
+- Start Command: gunicorn app:app
+
+Environment variables:
+DB_HOST=<TiDB host>
+DB_PORT=4000
+DB_USER=<TiDB username>
+DB_PASSWORD=<TiDB password>
+DB_NAME=portfolio
+DB_SSL_CA=certs/isrgrootx1.pem
+SECRET_KEY=<long random secret>
+ADMIN_USERNAME=<your admin username>
+ADMIN_PASSWORD=<strong admin password>
+SESSION_COOKIE_SECURE=true
+CROSS_ORIGIN_ADMIN=true
+
+Do not commit .env or database passwords.
