@@ -36,6 +36,33 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import safe_join, secure_filename
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+def _load_local_env():
+    """Load backend/.env for local development without overriding real environment variables."""
+    env_path = os.path.join(BASE_DIR, "backend", ".env")
+    if not os.path.isfile(env_path):
+        return
+    try:
+        with open(env_path, "r", encoding="utf-8") as env_file:
+            for raw_line in env_file:
+                line = raw_line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                if line.startswith("export "):
+                    line = line[7:].lstrip()
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip()
+                if not key:
+                    continue
+                if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+                    value = value[1:-1]
+                os.environ.setdefault(key, value)
+    except OSError:
+        pass
+
+_load_local_env()
+
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 UPLOAD_DIR = os.path.join(BASE_DIR, "backend", "uploads")
 
